@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 
+from utils import Directions
 from robomap import RoboMap
 from robot import Robot
 from ros_movement_executor import ROSMovementExecutor
@@ -12,9 +13,11 @@ pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 def main():
     q1_map = RoboMap(4)
     q1_map.initialize()
+    print("Map initialized: ")
     print(q1_map)
-    # robot = Robot(q1_map)
-    # robotMovementExecutor = ROSMovementExecutor(pub, robot)
+    robot = Robot(q1_map)
+    robotMovementExecutor = ROSMovementExecutor(rospy, pub, robot)
+    robotMovementExecutor.moveRobot(Directions.EAST)
 
     return
 
