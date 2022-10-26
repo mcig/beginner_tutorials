@@ -125,7 +125,7 @@ class DFSAlgorithmRunner:
         self.rewardCells = []
 
     def run(self):
-        self.explore(self.roboMap.startCell, 0)
+        self.exploreIterative(self.roboMap.startCell)
 
         # print the explored cells
         print("Explored cells: ")
@@ -160,3 +160,47 @@ class DFSAlgorithmRunner:
 
         return
 
+    def exploreIterative(self, cell):
+        stack = []
+        stack.append(cell)
+        isBacktracking = False
+
+        while len(stack) > 0:
+            currentCell = stack.pop()
+            if currentCell.isVisited:
+                self.exploredCells.append(currentCell)
+                continue
+
+            if len(self.rewardCells) == self.rewardDepth:
+                return
+
+            currentCell.isVisited = True
+            self.exploredCells.append(currentCell)
+
+            if currentCell.isReward:
+                self.rewardCells.append(currentCell)
+
+            for neighbor in reversed(currentCell.neighbors):
+                if neighbor and not neighbor.isObstacle:
+                    stack.append(neighbor)
+        
+        return
+
+
+        # while len(stack) > 0:
+        #     currentCell = stack.pop()
+        #     if currentCell.isVisited:
+        #         continue
+
+        #     if len(self.rewardCells) == self.rewardDepth:
+        #         break
+
+        #     currentCell.isVisited = True
+        #     self.exploredCells.append(currentCell)
+
+        #     if currentCell.isReward:
+        #         self.rewardCells.append(currentCell)
+
+        #     for neighbor in reversed(currentCell.neighbors):
+        #         if neighbor and not neighbor.isObstacle:
+        #             stack.append(neighbor)
