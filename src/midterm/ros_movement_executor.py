@@ -90,3 +90,13 @@ class ROSMovementExecutor:
         (decidedCommand, newFacedDirection) = self.decideRobotMovement(toDirection)
         decidedCommand()
         self.robot.facingDirection = newFacedDirection
+
+    def animateRobot(self, exploredCells):
+        for nextCell in exploredCells:
+            fromCell = self.robot.currentCell
+            
+            toDirection = fromCell.getDirectionToCell(nextCell)
+            self.moveRobot(toDirection)
+            
+            self.robot.currentCell = nextCell
+       

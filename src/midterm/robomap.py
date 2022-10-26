@@ -1,4 +1,5 @@
 import random
+from utils import Directions
 
 class Cell:
     def __init__(self, id, coords, isObstacle=False, isReward=0, isStart=False):
@@ -29,6 +30,18 @@ class Cell:
         # left
         if self.coords[1] > 0:
             self.neighbors[3] = map[self.coords[0]][self.coords[1]-1]
+
+    def getDirectionToCell(self, otherCell):
+        if self.neighbors[0] == otherCell:
+            return Directions.NORTH
+        elif self.neighbors[1] == otherCell:
+            return Directions.EAST
+        elif self.neighbors[2] == otherCell:
+            return Directions.SOUTH
+        elif self.neighbors[3] == otherCell:
+            return Directions.WEST
+        else:
+            return None
 
 
 class RoboMap:
@@ -73,7 +86,6 @@ class RoboMap:
     def initialize(self):
         startCell = self.getCell(12)
         startCell.isStart = True
-        startCell.isVisited = True
 
         self.startCell = startCell
 
@@ -104,4 +116,47 @@ class RoboMap:
 
         return mapStr
 
+
+class DFSAlgorithmRunner:
+    def __init__(self, roboMap, rewardDepth):
+        self.roboMap = roboMap
+        self.rewardDepth = rewardDepth
+        self.exploredCells = []
+        self.rewardCells = []
+
+    def run(self):
+        self.explore(self.roboMap.startCell, 0)
+
+        # print the explored cells
+        print("Explored cells: ")
+        for cell in self.exploredCells:
+            print(cell.id, end=" ")
+        print()
+
+        # print the reward cells
+        print("Reward cells: ")
+        for cell in self.rewardCells:
+            print(cell.id, end=" ")
+        print()
+
+        return self.exploredCells
+
+    def explore(self, cell, depth):
+        if cell.isVisited:
+            return
+        
+        if len(self.rewardCells) == self.rewardDepth:
+            return
+
+        cell.isVisited = True
+        self.exploredCells.append(cell)
+
+        if cell.isReward:
+            self.rewardCells.append(cell)
+
+        for neighbor in cell.neighbors:
+            if neighbor and not neighbor.isObstacle:
+                self.explore(neighbor, depth + 1)
+
+        return
 

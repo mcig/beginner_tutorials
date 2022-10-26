@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
-from utils import Directions
-from robomap import RoboMap
+from robomap import DFSAlgorithmRunner, RoboMap
 from robot import Robot
 from ros_movement_executor import ROSMovementExecutor
 import rospy
@@ -17,7 +16,9 @@ def main():
     print(q1_map)
     robot = Robot(q1_map)
     robotMovementExecutor = ROSMovementExecutor(rospy, pub, robot)
-    robotMovementExecutor.moveRobot(Directions.EAST)
+    dfsRunner = DFSAlgorithmRunner(q1_map, 2)
+    exploredCells = dfsRunner.run()
+    robotMovementExecutor.animateRobot(exploredCells)
 
     return
 
