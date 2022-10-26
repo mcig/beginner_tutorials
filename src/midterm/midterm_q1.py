@@ -16,6 +16,9 @@ def main():
     print(q1_map)
     robot = Robot(q1_map)
     robotMovementExecutor = ROSMovementExecutor(rospy, pub, robot)
+    # dummy go forward for fixing weird bug
+    robotMovementExecutor.goForward()
+    #
     dfsRunner = DFSAlgorithmRunner(q1_map, 2)
     exploredCells = dfsRunner.run()
     robotMovementExecutor.animateRobot(exploredCells)

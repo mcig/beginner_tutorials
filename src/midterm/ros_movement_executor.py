@@ -9,7 +9,7 @@ class ROSMovementExecutor:
         self.rate = self.rospy.Rate(10)
 
     def rotateTask(self, clockwise):
-        speed = 0.7
+        speed = 20
         angle = 90
         
         vel_msg = Twist()
@@ -51,21 +51,17 @@ class ROSMovementExecutor:
     def goRight(self):
         self.rotateTask(1)
         self.moveTask(4)
-        self.moveTask(4)
 
     def goLeft(self):
         self.rotateTask(-1)
         self.moveTask(4)
-        self.moveTask(4)
 
     def goForward(self):
-        self.moveTask(4)
         self.moveTask(4)
 
     def goBackward(self):
         self.rotateTask(1)
         self.rotateTask(1)
-        self.moveTask(4)
         self.moveTask(4)
 
     # up down 
@@ -92,6 +88,7 @@ class ROSMovementExecutor:
         self.robot.facingDirection = newFacedDirection
 
     def animateRobot(self, exploredCells):
+        exploredCells = exploredCells[1:]
         for nextCell in exploredCells:
             fromCell = self.robot.currentCell
             
