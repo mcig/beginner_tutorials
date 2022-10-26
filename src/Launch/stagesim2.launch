@@ -1,0 +1,5 @@
+<launch>
+    <param name="use_sim_time" value="true"/>
+    <node pkg="stage_ros" type="stageros" name="stageros" args="$(find beginner_tutorials)/worlds/worldfile.world"/>
+    <node pkg="beginner_tutorials" type="move2goal2.py" args="0 True" name="robotmove" output="screen"/>
+</launch>
