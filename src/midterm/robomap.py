@@ -129,7 +129,7 @@ class DFSAlgorithmRunner:
 
         # if a cell is explored 3 times remove the last one
         for cell in self.exploredCells:
-            if self.exploredCells.count(cell) == 3:
+            if self.exploredCells.count(cell) > 2:
                 reversedExploredCells = self.exploredCells[::-1]
                 reversedExploredCells.remove(cell)
                 self.exploredCells = reversedExploredCells[::-1]
@@ -176,7 +176,7 @@ class DFSAlgorithmRunner:
                 return
             
             currentCell = stack.pop()
-            
+
             if currentCell.isVisited:
                 self.exploredCells.append(currentCell)
                 continue
@@ -192,22 +192,3 @@ class DFSAlgorithmRunner:
                     stack.append(neighbor)
         
         return
-
-
-        # while len(stack) > 0:
-        #     currentCell = stack.pop()
-        #     if currentCell.isVisited:
-        #         continue
-
-        #     if len(self.rewardCells) == self.rewardDepth:
-        #         break
-
-        #     currentCell.isVisited = True
-        #     self.exploredCells.append(currentCell)
-
-        #     if currentCell.isReward:
-        #         self.rewardCells.append(currentCell)
-
-        #     for neighbor in reversed(currentCell.neighbors):
-        #         if neighbor and not neighbor.isObstacle:
-        #             stack.append(neighbor)
