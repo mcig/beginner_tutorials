@@ -54,11 +54,11 @@ def moveTask(speed, distance, isForward, lspeed = 0.0):
 if __name__ == '__main__':
     try:
         rotateTask(10, 90, -1)
-        moveTask(0.5)
+        moveTask(0.5, 3, 1)
         rotateTask(10, 90, 1)
-        moveTask(0.5)
+        moveTask(0.5, 3, 1)
         rotateTask(10, 90, 1)
-        moveTask(0.5)
+        moveTask(0.5, 3, 1)
     except rospy.ROSInterruptException:
         pass
 
