@@ -29,18 +29,17 @@ class ROSMovementExecutor:
         self.pub.publish(vel_msg)
 
 
-    def moveTask(self, isForward):
+    def moveTask(self, distance):
         speed = 0.7
-        distance = 4
         
         vel_msg = Twist()
         
-        vel_msg.linear.x = speed if isForward else -abs(speed)
+        vel_msg.linear.x = speed
 
         t0 = self.rospy.Time.now().to_sec()
         
         current_distance = 0
-        while not current_distance <= distance:
+        while current_distance <= distance:
             self.pub.publish(vel_msg)
             t1 = self.rospy.Time.now().to_sec()
             current_distance = speed * (t1-t0)
@@ -51,26 +50,30 @@ class ROSMovementExecutor:
 
     def goRight(self):
         self.rotateTask(1)
-        self.moveTask(1)
+        self.moveTask(4)
+        self.moveTask(4)
 
     def goLeft(self):
         self.rotateTask(-1)
-        self.moveTask(1)
+        self.moveTask(4)
+        self.moveTask(4)
 
     def goForward(self):
-        self.moveTask(1)
+        self.moveTask(4)
+        self.moveTask(4)
 
     def goBackward(self):
         self.rotateTask(1)
         self.rotateTask(1)
-        self.moveTask(1)
+        self.moveTask(4)
+        self.moveTask(4)
 
     # up down 
     def decideRobotMovement(self, toDirection):
         fromDirection = self.robot.facingDirection
         commandToExecute = None
 
-        diffInNumbers = (toDirection - fromDirection) % 4
+        diffInNumbers = (int(toDirection) - int(fromDirection)) % 4
 
         if diffInNumbers == 0:
             commandToExecute = self.goForward
@@ -84,6 +87,6 @@ class ROSMovementExecutor:
         return (commandToExecute, toDirection)
 
     def moveRobot(self, toDirection):
-        (decidedCommand, newFacedDirection) = self.decideRobotMovement(self.robot, toDirection)
+        (decidedCommand, newFacedDirection) = self.decideRobotMovement(toDirection)
         decidedCommand()
         self.robot.facingDirection = newFacedDirection
