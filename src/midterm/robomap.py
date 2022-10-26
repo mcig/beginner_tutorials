@@ -127,6 +127,13 @@ class DFSAlgorithmRunner:
     def run(self):
         self.exploreIterative(self.roboMap.startCell)
 
+        # if a cell is explored 3 times remove the last one
+        for cell in self.exploredCells:
+            if self.exploredCells.count(cell) == 3:
+                reversedExploredCells = self.exploredCells[::-1]
+                reversedExploredCells.remove(cell)
+                self.exploredCells = reversedExploredCells[::-1]
+
         # print the explored cells
         print("Explored cells: ")
         for cell in self.exploredCells:
@@ -141,7 +148,7 @@ class DFSAlgorithmRunner:
 
         return self.exploredCells
 
-    def explore(self, cell, depth):
+    def explore(self, cell, depth=0):
         if cell.isVisited:
             return
         
@@ -163,16 +170,16 @@ class DFSAlgorithmRunner:
     def exploreIterative(self, cell):
         stack = []
         stack.append(cell)
-        isBacktracking = False
 
         while len(stack) > 0:
+            if len(self.rewardCells) == self.rewardDepth:
+                return
+            
             currentCell = stack.pop()
+            
             if currentCell.isVisited:
                 self.exploredCells.append(currentCell)
                 continue
-
-            if len(self.rewardCells) == self.rewardDepth:
-                return
 
             currentCell.isVisited = True
             self.exploredCells.append(currentCell)
