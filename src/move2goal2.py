@@ -13,6 +13,7 @@ nodename = f"/robot_{nodeid}"
 
 class Turtlebot:
     def __init__(self):
+        # DOES NOT WORK WHEN FALSE IS PASSED BCS ITS PASSED AS A STR FFS
         rospy.init_node('turtletogoal', anonymous=True)
         self.vel_publisher = rospy.Publisher(f"{nodename}/cmd_vel" if multipleBots else "/cmd_vel", Twist, queue_size=10)
         self.pose_subscriber = rospy.Subscriber(f"{nodename}/odom" if multipleBots else "/odom", Odometry, self.update_pose)
