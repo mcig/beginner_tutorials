@@ -74,8 +74,7 @@ floorplan
 # first robot
 erratic
 ( 
-#	pose [ 3.5 4 0 180.000 ] 
-	pose [ 2 1 0 180.000 ] 
+	pose [ -6 -6 0 0.000 ] 
 	name "robot_0" 
 	color "blue" 
 	hokuyolaser(pose [ 0.5 0.000 -0.15 0.000 ])
