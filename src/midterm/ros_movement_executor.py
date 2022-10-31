@@ -2,9 +2,9 @@ import math
 from geometry_msgs.msg import Twist
 
 class ROSMovementExecutor:
-    def __init__(self, rospy, pub, robot):
-        self.rospy = rospy
-        self.pub = pub
+    def __init__(self, robot):
+        self.rospy = robot.myRos
+        self.pub = robot.myPublisher
         self.robot = robot
         self.rate = self.rospy.Rate(10)
 
@@ -65,35 +65,28 @@ class ROSMovementExecutor:
         self.moveTask(4)
 
     # up down 
-    def decideRobotMovement(self, toDirection):
+    def decideRobotMovementToCell(self, toCell):
         fromDirection = self.robot.facingDirection
-        commandToExecute = None
+
+        fromCell = self.robot.currentCell
+        toDirection = fromCell.getDirectionToCell(toCell)
 
         diffInNumbers = (int(toDirection) - int(fromDirection)) % 4
 
         if diffInNumbers == 0:
-            commandToExecute = self.goForward
+            self.goForward()
         elif diffInNumbers == 1:
-            commandToExecute = self.goRight
+            self.goRight()
         elif diffInNumbers == 2:
-            commandToExecute = self.goBackward
+            self.goBackward()
         else:
-            commandToExecute = self.goLeft
+            self.goLeft()
 
-        return (commandToExecute, toDirection)
+        return toDirection
 
-    def moveRobot(self, toDirection):
-        (decidedCommand, newFacedDirection) = self.decideRobotMovement(toDirection)
-        decidedCommand()
+    def moveRobotTo(self, toCell):
+        print("Robot is heading to cell: ", toCell.id)
+        newFacedDirection = self.decideRobotMovementToCell(toCell)
+
+        self.robot.currentCell = toCell
         self.robot.facingDirection = newFacedDirection
-
-    def animateRobot(self, exploredCells):
-        exploredCells = exploredCells[1:]
-        for nextCell in exploredCells:
-            fromCell = self.robot.currentCell
-            
-            toDirection = fromCell.getDirectionToCell(nextCell)
-            self.moveRobot(toDirection)
-            
-            self.robot.currentCell = nextCell
-       
