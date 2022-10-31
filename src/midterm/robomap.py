@@ -149,18 +149,16 @@ class DFSAlgorithmRunner:
     def exploreIterative(self, cell):
         stack = []
         stack.append(cell)
-        isBacktracking = False
+
         while len(stack) > 0:
             if len(self.rewardCells) == self.rewardDepth:
                 return
             
             currentCell = stack.pop()
 
-            isBacktracking = not currentCell.isVisited or currentCell.hasUnvisitedNeighbors()
-                
             if currentCell.isVisited:
                 # special case for id == 1
-                if(isBacktracking or currentCell.id == 1):
+                if(currentCell.hasUnvisitedNeighbors() or currentCell.id == 1):
                     self.exploredCells.append(currentCell)
                 continue
 
