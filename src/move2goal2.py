@@ -8,7 +8,7 @@ from tf.transformations import euler_from_quaternion, quaternion_from_euler
 from math import pow, atan2, sqrt
 
 nodeid = str(sys.argv[1])
-multipleBots = sys.argv[2]
+multipleBots = int(sys.argv[2])
 nodename = f"/robot_{nodeid}"
 
 class Turtlebot:

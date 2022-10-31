@@ -1,0 +1,11 @@
+<launch>
+    <!-- Self-written code 
+    <node pkg="beginner_tutorials" type="scanenv_gazebo.py" args="0 1" name="scanenv1" output="screen"/>
+    <node pkg="beginner_tutorials" type="scanenv_gazebo.py" args="1 1" name="scanenv2" output="screen"/>
+    <node pkg="beginner_tutorials" type="scanenv_gazebo.py" args="2 1" name="scanenv3" output="screen"/>
+    -->
+    <node pkg="beginner_tutorials" type="turtlebot3_obstacle.py" args="0" name="bot1" output="screen"/>
+    <node pkg="beginner_tutorials" type="turtlebot3_obstacle.py" args="1" name="bot2" output="screen"/>
+    <node pkg="beginner_tutorials" type="turtlebot3_obstacle.py" args="2" name="bot3" output="screen"/>
+    
+</launch>
