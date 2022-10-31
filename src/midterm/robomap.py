@@ -45,7 +45,7 @@ class Cell:
 
     def hasUnvisitedNeighbors(self):
         for neighbor in self.neighbors:
-            if neighbor != None and neighbor.isVisited == False:
+            if neighbor is not None and not neighbor.isVisited and not neighbor.isObstacle:
                 return True
         return False
         
@@ -146,48 +146,32 @@ class DFSAlgorithmRunner:
 
         return self.exploredCells
 
-    # not used
-    def explore(self, cell, depth=0):
-        if cell.isVisited:
-            return
-        
-        if len(self.rewardCells) == self.rewardDepth:
-            return
-
-        cell.isVisited = True
-        self.exploredCells.append(cell)
-
-        if cell.isReward:
-            self.rewardCells.append(cell)
-
-        for neighbor in cell.neighbors:
-            if neighbor and not neighbor.isObstacle:
-                self.explore(neighbor, depth + 1)
-
-        return
-    #
-
     def exploreIterative(self, cell):
         stack = []
         stack.append(cell)
-
+        isBacktracking = False
         while len(stack) > 0:
             if len(self.rewardCells) == self.rewardDepth:
                 return
             
             currentCell = stack.pop()
-            self.exploredCells.append(currentCell)
 
+            isBacktracking = not currentCell.isVisited or currentCell.hasUnvisitedNeighbors()
+                
             if currentCell.isVisited:
+                # special case for id == 1
+                if(isBacktracking or currentCell.id == 1):
+                    self.exploredCells.append(currentCell)
                 continue
 
             currentCell.isVisited = True
+            self.exploredCells.append(currentCell)
 
             if currentCell.isReward:
                 self.rewardCells.append(currentCell)
 
             for neighbor in reversed(currentCell.neighbors):
-                if not neighbor or neighbor.isObstacle: continue
-                stack.append(neighbor)
+                if(neighbor and not neighbor.isObstacle):
+                    stack.append(neighbor)
         
         return
