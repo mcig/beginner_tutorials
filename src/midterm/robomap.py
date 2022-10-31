@@ -43,7 +43,12 @@ class Cell:
         else:
             return None
 
-
+    def hasUnvisitedNeighbors(self):
+        for neighbor in self.neighbors:
+            if neighbor != None and neighbor.isVisited == False:
+                return True
+        return False
+        
 class RoboMap:
     def __init__(self, N=4):
         self.roboMap = []
@@ -127,13 +132,6 @@ class DFSAlgorithmRunner:
     def run(self):
         self.exploreIterative(self.roboMap.startCell)
 
-        # if a cell is explored 3 times remove the last one
-        for cell in self.exploredCells:
-            if self.exploredCells.count(cell) > 2:
-                reversedExploredCells = self.exploredCells[::-1]
-                reversedExploredCells.remove(cell)
-                self.exploredCells = reversedExploredCells[::-1]
-
         # print the explored cells
         print("Explored cells: ")
         for cell in self.exploredCells:
@@ -148,6 +146,7 @@ class DFSAlgorithmRunner:
 
         return self.exploredCells
 
+    # not used
     def explore(self, cell, depth=0):
         if cell.isVisited:
             return
@@ -166,6 +165,7 @@ class DFSAlgorithmRunner:
                 self.explore(neighbor, depth + 1)
 
         return
+    #
 
     def exploreIterative(self, cell):
         stack = []
@@ -176,19 +176,18 @@ class DFSAlgorithmRunner:
                 return
             
             currentCell = stack.pop()
+            self.exploredCells.append(currentCell)
 
             if currentCell.isVisited:
-                self.exploredCells.append(currentCell)
                 continue
 
             currentCell.isVisited = True
-            self.exploredCells.append(currentCell)
 
             if currentCell.isReward:
                 self.rewardCells.append(currentCell)
 
             for neighbor in reversed(currentCell.neighbors):
-                if neighbor and not neighbor.isObstacle:
-                    stack.append(neighbor)
+                if not neighbor or neighbor.isObstacle: continue
+                stack.append(neighbor)
         
         return
