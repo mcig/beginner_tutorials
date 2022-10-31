@@ -9,10 +9,6 @@ class DFSAlgorithmRunner:
         self.rewardCells = []
 
     def run(self, rewardDepth):
-        # dummy go forward for fixing weird bug
-        self.movementExecutor.goForward()
-        #
-
         self.rewardDepth = rewardDepth
         self.exploreIterative(self.roboMap.startCell)
 
