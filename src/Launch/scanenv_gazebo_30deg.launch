@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="beginner_tutorials" type="scanenv_gazebo_30deg.py" args="0 1" name="scanenv1" output="screen"/>
+    <node pkg="beginner_tutorials" type="scanenv_gazebo_30deg.py" args="1 1" name="scanenv2" output="screen"/>
+    <node pkg="beginner_tutorials" type="scanenv_gazebo_30deg.py" args="2 1" name="scanenv3" output="screen"/>
+</launch>
