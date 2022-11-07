@@ -1,0 +1,12 @@
+<launch>
+    <node pkg="turtlesim" type="turtlesim_node" name="turtle1ded" />
+    <node pkg="rosservice" type="rosservice" name="kill" args="call /kill turtle1" />
+
+    <node pkg="rosservice" type="rosservice" name="turtle1" args="call /spawn 3 3 0.2 turtle1" />
+    <node pkg="rosservice" type="rosservice" name="turtle2" args="call /spawn 2 2 0.0 turtle2" />
+    <node pkg="rosservice" type="rosservice" name="turtle3" args="call /spawn 4 4 0.5 turtle3" />
+    
+    <node pkg="beginner_tutorials" type="move3.py" name="killermove" args="1 5 0"/>
+    <node pkg="beginner_tutorials" type="move3.py" name="killermove2" args="2 5 5"/>
+    <node pkg="beginner_tutorials" type="move3.py" name="killermove3" args="3 2 0"/>
+</launch>
