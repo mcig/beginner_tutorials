@@ -1,0 +1,18 @@
+<launch>
+    <arg name="goal1x" default="-0.5"/>
+    <arg name="goal1y" default="0.5"/>
+
+    <arg name="goal2x" default="-0.7"/>
+    <arg name="goal2y" default="-0.7"/>
+
+    <arg name="goal3x" default="0.6"/>
+    <arg name="goal3y" default="0.6"/>
+
+    <arg name="id_1" default="0"/>
+    <arg name="id_2" default="1"/>
+    <arg name="id_3" default="2"/>
+
+    <node pkg="beginner_tutorials" type="move2goal2.py" args="$(arg id_1) 1 $(arg goal1x) $(arg goal1y)" name="turtlemove1" output="screen"/>
+    <node pkg="beginner_tutorials" type="move2goal2.py" args="$(arg id_2) 1 $(arg goal2x) $(arg goal2y)" name="turtlemove2" output="screen"/>
+    <node pkg="beginner_tutorials" type="move2goal2.py" args="$(arg id_3) 1 $(arg goal3x) $(arg goal3y)" name="turtlemove3" output="screen"/>
+</launch>

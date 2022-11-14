@@ -9,7 +9,10 @@ from math import pow, atan2, sqrt
 
 nodeid = str(sys.argv[1])
 multipleBots = int(sys.argv[2])
-nodename = f"/robot_{nodeid}"
+nodename = f"/tb3_{nodeid}"
+
+goalx = float(sys.argv[3])
+goaly = float(sys.argv[4])
 
 class Turtlebot:
     def __init__(self):
@@ -47,9 +50,9 @@ class Turtlebot:
     def move2goal(self):
         newOdom = Odometry()
         goal_pose = newOdom.pose.pose
-        goal_pose.position.x = float(input("x: "))
-        goal_pose.position.y = float(input("y: "))
-        dist_tolerance = float(input("dist_tolerance: "))
+        goal_pose.position.x = goalx 
+        goal_pose.position.y = goaly #float(input("y: "))
+        dist_tolerance = 0.2 #float(input("dist_tolerance: "))
 
         vel_msg = Twist()
 
