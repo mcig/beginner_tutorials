@@ -1,5 +1,5 @@
 <launch>
-    <node pkg="beginner_tutorials" type="wallFollow.py" args="1" name="turtle1follow" output="screen"/>
-    <node pkg="beginner_tutorials" type="wallFollow.py" args="2" name="turtle2follow" output="screen"/>
-    <node pkg="beginner_tutorials" type="wallFollow.py" args="3" name="turtle3follow" output="screen"/>
+    <node pkg="beginner_tutorials" type="wallFollow.py" args="0" name="turtle1follow" output="screen"/>
+    <node pkg="beginner_tutorials" type="wallFollow.py" args="1" name="turtle2follow" output="screen"/>
+    <node pkg="beginner_tutorials" type="wallFollow.py" args="2" name="turtle3follow" output="screen"/>
 </launch>
