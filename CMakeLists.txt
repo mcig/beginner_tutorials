@@ -150,6 +150,13 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
+#add_dependencies(publishStr beginner_tutorials_generate_messages_cpp)
+
+add_executable(publishStr src/publishStr.cpp)
+target_link_libraries(publishStr ${catkin_LIBRARIES})
+add_executable(subscribeStr src/subscribeStr.cpp)
+target_link_libraries(subscribeStr ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############
