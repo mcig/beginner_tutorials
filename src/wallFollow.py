@@ -21,11 +21,11 @@ minright = 10000000.0
 maxleft = -1
 maxright = -1
 
-nodeid = str(sys.argv[1])
-nodename = f"/tb3_{nodeid}"
+# nodeid = str(sys.argv[1])
+# nodename = f"/tb3_{nodeid}"
 
 rospy.init_node("wallFollow")
-pub = rospy.Publisher(nodename + "/cmd_vel", Twist, queue_size=10)
+pub = rospy.Publisher("/cmd_vel", Twist, queue_size=10)
 rate = rospy.Rate(40)
 
 
@@ -81,7 +81,7 @@ def callback(msg):
 def rotate():
     global obstacle
 
-    velocity_publisher = rospy.Publisher(nodename + "/cmd_vel", Twist, queue_size=10)
+    velocity_publisher = rospy.Publisher("/cmd_vel", Twist, queue_size=10)
     vel_msg = Twist()
 
     print("Let's rotate your robot")
@@ -135,6 +135,6 @@ def controlrobot():
 
 
 # sub = rospy.Subscriber('/base_scan', LaserScan, callback)
-sub = rospy.Subscriber(nodename + "/scan", LaserScan, callback)
+sub = rospy.Subscriber("/scan", LaserScan, callback)
 controlrobot()
 rospy.spin()

@@ -16,7 +16,6 @@ goaly = float(sys.argv[4])
 
 class Turtlebot:
     def __init__(self):
-        # DOES NOT WORK WHEN FALSE IS PASSED BCS ITS PASSED AS A STR FFS
         rospy.init_node('turtletogoal', anonymous=True)
         self.vel_publisher = rospy.Publisher(f"{nodename}/cmd_vel" if multipleBots else "/cmd_vel", Twist, queue_size=10)
         self.pose_subscriber = rospy.Subscriber(f"{nodename}/odom" if multipleBots else "/odom", Odometry, self.update_pose)
@@ -52,7 +51,7 @@ class Turtlebot:
         goal_pose = newOdom.pose.pose
         goal_pose.position.x = goalx 
         goal_pose.position.y = goaly #float(input("y: "))
-        dist_tolerance = 0.2 #float(input("dist_tolerance: "))
+        dist_tolerance = 0.1 #float(input("dist_tolerance: "))
 
         vel_msg = Twist()
 
