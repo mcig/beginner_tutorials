@@ -57,6 +57,10 @@ class Turtlebot:
 
         while self.euclidean_distance(goal_pose) >= dist_tolerance:
             vel_msg.linear.x = self.linear_vel(goal_pose)
+            vel_msg.linear.y = 0
+            vel_msg.linear.z = 0
+            vel_msg.angular.x = 0
+            vel_msg.angular.y = 0
             vel_msg.angular.z = self.angular_vel(goal_pose)
 
             self.vel_publisher.publish(vel_msg)
