@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -158,6 +159,11 @@ target_link_libraries(publishStr ${catkin_LIBRARIES})
 add_executable(subscribeStr src/subscribeStr.cpp)
 target_link_libraries(subscribeStr ${catkin_LIBRARIES})
 
+add_executable(turtle_tf_listener src/turtle_tf_listener.cpp)
+target_link_libraries(turtle_tf_listener ${catkin_LIBRARIES})
+
+add_executable(turtle_tf_broadcaster src/turtle_tf_broadcaster.cpp)
+target_link_libraries(turtle_tf_broadcaster ${catkin_LIBRARIES})
 
 #############
 ## Install ##
