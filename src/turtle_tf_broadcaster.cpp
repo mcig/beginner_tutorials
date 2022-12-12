@@ -50,8 +50,9 @@ int main(int argc, char **argv)
 
     ros::Subscriber sub = n.subscribe(turtle_name + "/pose", 10, &poseCallback);
 
-    if (turtle_name == "/turtle1" || turtle_name == "turtle1")
+    if (turtle_name == "/turtle1")
     {
+        ROS_INFO("turtle1 is moving");
         move(n);
     }
 
