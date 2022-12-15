@@ -4,9 +4,8 @@ import rospy
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 from tf.transformations import euler_from_quaternion
-from math import pow, atan2, sqrt
+from math import pow, atan2, sqrt, pi
 from sensor_msgs.msg import LaserScan
-
 class TurtlebotAbstract():
     def __init__(self, nodeName):
         self.vel_publisher = rospy.Publisher(f"{nodeName}/cmd_vel", Twist, queue_size=10)
@@ -63,6 +62,11 @@ class TurtlebotAbstract():
             vel_msg.angular.x = 0
             vel_msg.angular.y = 0
             vel_msg.angular.z = self.angular_vel(goal_pose)
+            
+            # if facing wrong direction, turn in place
+            if(abs(self.angular_vel(goal_pose)) > pi / 2):
+                vel_msg.linear.x = 0
+                vel_msg.angular.z = self.angular_vel(goal_pose)
 
             self.vel_publisher.publish(vel_msg)
 
