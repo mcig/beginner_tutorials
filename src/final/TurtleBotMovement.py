@@ -7,10 +7,12 @@ from tf.transformations import euler_from_quaternion
 from math import pow, atan2, sqrt
 
 class Turtlebot:
-    def __init__(self, nodeName):
-        self.nodeName = nodeName
-        self.vel_publisher = rospy.Publisher(f"{nodeName}/cmd_vel", Twist, queue_size=10)
-        self.pose_subscriber = rospy.Subscriber(f"{nodeName}/odom", Odometry, self.update_pose)
+    def __init__(self, nodeId):
+        self.nodeId = nodeId
+        self.nodeName = f"robot_{nodeId}"
+        self.robotName = f"robot_{nodeId + 1}"
+        self.vel_publisher = rospy.Publisher(f"{self.nodeName}/cmd_vel", Twist, queue_size=10)
+        self.pose_subscriber = rospy.Subscriber(f"{self.nodeName}/odom", Odometry, self.update_pose)
         self.rate = rospy.Rate(10)
 
         self.odom = Odometry()
@@ -68,6 +70,6 @@ class Turtlebot:
         self.vel_publisher.publish(vel_msg)
 
     def __str__(self):
-        return f"I am robot {self.nodeName} and my goal is ({self.goalX}, {self.goalY})"
+        return f"I am robot {self.robotName} and my goal is ({self.goalX}, {self.goalY})"
     
         
