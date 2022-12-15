@@ -21,11 +21,12 @@ class Turtlebot(TurtlebotAbstract):
     def check_obstacle(self, msg):
         midPoint = len(msg.ranges) // 2
         
-        minus15 = msg.ranges[:midPoint - 15]
-        plus15 = msg.ranges[midPoint + 15:]
+        minus15 = msg.ranges[midPoint - 15:midPoint]
+        plus15 = msg.ranges[midPoint:midPoint + 15]
+        threshold = 1
         
         # if there is an obstacle closer than 0.5 in front of the robot, pause the robot
-        if (min(minus15) < 0.5 or min(plus15) < 0.5):
+        if (min(minus15) < threshold or min(plus15) < threshold):
             self.pause = True
             
             if(not self.kickstartedNextBot):
