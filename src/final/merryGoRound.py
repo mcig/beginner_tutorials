@@ -34,7 +34,7 @@ def main():
 
     # parallelize the movement of the robots
     rospy.Subscriber(f"{robot2.nodeName}/kickstart", Bool, lambda _:startMovement(robot2))
-    rospy.Subscriber(f"{robot2.nodeName}/kickstart", Bool, lambda _:startMovement(robot3))
+    rospy.Subscriber(f"{robot3.nodeName}/kickstart", Bool, lambda _:startMovement(robot3))
 
     startMovement(robot1)
 
