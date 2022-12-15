@@ -5,15 +5,15 @@ from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 from tf.transformations import euler_from_quaternion
 from math import pow, atan2, sqrt
+from sensor_msgs.msg import LaserScan
 
-class Turtlebot:
-    def __init__(self, nodeId):
-        self.nodeId = nodeId
-        self.nodeName = f"robot_{nodeId}"
-        self.robotName = f"robot_{nodeId + 1}"
-        self.vel_publisher = rospy.Publisher(f"{self.nodeName}/cmd_vel", Twist, queue_size=10)
-        self.pose_subscriber = rospy.Subscriber(f"{self.nodeName}/odom", Odometry, self.update_pose)
+class TurtlebotAbstract():
+    def __init__(self, nodeName):
+        self.vel_publisher = rospy.Publisher(f"{nodeName}/cmd_vel", Twist, queue_size=10)
         self.rate = rospy.Rate(10)
+
+        self.pose_subscriber = rospy.Subscriber(f"{nodeName}/odom", Odometry, self.update_pose)
+        self.scanner_subscriber = rospy.Subscriber(f"{nodeName}/base_scan", LaserScan, self.check_obstacle)
 
         self.odom = Odometry()
         self.pose = self.odom.pose.pose
@@ -25,7 +25,7 @@ class Turtlebot:
         orientation_list = [orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w]
         (self.roll, self.pitch, self.yaw) = euler_from_quaternion(orientation_list)
         
-        #print(self.yaw)
+        pass
 
     def euclidean_distance(self, goal_pose):
         return sqrt(pow((goal_pose.position.x - self.pose.position.x), 2) + pow((goal_pose.position.y - self.pose.position.y), 2))
@@ -39,12 +39,9 @@ class Turtlebot:
     def angular_vel(self, goal_pose, constant=6):
         return constant * (self.steering_angle(goal_pose) - self.yaw)
 
-    def setGoal(self, odomData):
-        self.goalX = odomData.pose.pose.position.x
-        self.goalY = odomData.pose.pose.position.y
-
-
     def move2goal(self):
+        print(f"{self.robotName} started moving to ({self.goalX}, {self.goalY})")
+
         newOdom = Odometry()
         goal_pose = newOdom.pose.pose
         goal_pose.position.x = self.goalX 
@@ -54,6 +51,12 @@ class Turtlebot:
         vel_msg = Twist()
 
         while self.euclidean_distance(goal_pose) >= dist_tolerance:
+            if(self.pause):
+                vel_msg.linear.x = 0
+                vel_msg.angular.z = 0
+                self.vel_publisher.publish(vel_msg)
+                continue
+                
             vel_msg.linear.x = self.linear_vel(goal_pose)
             vel_msg.linear.y = 0
             vel_msg.linear.z = 0
@@ -69,7 +72,7 @@ class Turtlebot:
         vel_msg.angular.z = 0
         self.vel_publisher.publish(vel_msg)
 
-    def __str__(self):
-        return f"I am robot {self.robotName} and my goal is ({self.goalX}, {self.goalY})"
-    
+        print(f"{self.robotName} reached its destination!!!")
+
+
         

@@ -1,25 +1,52 @@
 #!/usr/bin/env python3
+
 import rospy
-from geometry_msgs.msg import Twist
+from nav_msgs.msg import Odometry
+from TurtleBotFinal import Turtlebot
+from std_msgs.msg import Bool
 
-def moveTask():
-    rospy.init_node('move_node', anonymous=True)
-    # pub = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
-    # pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
-    pub = rospy.Publisher('robot_0/cmd_vel', Twist, queue_size=10)
+def readOdomOfRobot(robot):
+    odom = rospy.wait_for_message(f"{robot.nodeName}/odom", Odometry, timeout=5)
+    return odom
 
-    # v = w . r    
-    vel_msg = Twist()
-    vel_msg.linear.x = 0.5
-    vel_msg.angular.z = 0.5
+def initiatesRobots(roboCount):
+    robots = []
+    for i in range(roboCount):
+        robot = Turtlebot(i)
+        robots.append(robot)
 
-    rate = rospy.Rate(10)
-    while not rospy.is_shutdown():
-        pub.publish(vel_msg)
-        rate.sleep()
+    return robots
+
+def startMovement(robot):
+    robot.move2goal()
+    
+def main():
+    rospy.init_node('merry_go_round', anonymous=True)
+
+    (robot1, robot2, robot3) = initiatesRobots(3)
+
+    robot1.setGoal(readOdomOfRobot(robot2))
+    print(robot1)
+    robot2.setGoal(readOdomOfRobot(robot3))
+    print(robot2)
+    robot3.setGoal(readOdomOfRobot(robot1))
+    print(robot3)
+
+    # parallelize the movement of the robots
+    rospy.Subscriber(f"{robot2.nodeName}/kickstart", Bool, lambda _:startMovement(robot2))
+    rospy.Subscriber(f"{robot2.nodeName}/kickstart", Bool, lambda _:startMovement(robot3))
+
+    startMovement(robot1)
+
+    rospy.spin()
+    
+    return
+
+
+
 
 if __name__ == '__main__':
     try:
-        moveTask()    
+        main()    
     except rospy.ROSInterruptException:
         pass
