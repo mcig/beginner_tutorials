@@ -5,14 +5,13 @@ from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 from tf.transformations import euler_from_quaternion
 from math import pow, atan2, sqrt, pi
-from sensor_msgs.msg import LaserScan
+
 class TurtlebotAbstract():
     def __init__(self, nodeName):
         self.vel_publisher = rospy.Publisher(f"{nodeName}/cmd_vel", Twist, queue_size=10)
         self.rate = rospy.Rate(10)
 
         self.pose_subscriber = rospy.Subscriber(f"{nodeName}/odom", Odometry, self.update_pose)
-        self.scanner_subscriber = rospy.Subscriber(f"{nodeName}/base_scan", LaserScan, self.check_obstacle)
 
         self.odom = Odometry()
         self.pose = self.odom.pose.pose
