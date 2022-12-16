@@ -5,7 +5,8 @@ from std_msgs.msg import Bool
 from TurtleBotAbstract import TurtlebotAbstract
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
-from math import  pi
+from math import pi
+from sensor_msgs.msg import LaserScan
 
 class Turtlebot(TurtlebotAbstract):
     def __init__(self, nodeId):
@@ -14,6 +15,8 @@ class Turtlebot(TurtlebotAbstract):
         super().__init__(self.nodeName)
 
         self.robotName = f"robot_{nodeId + 1}"
+        self.scanner_subscriber = rospy.Subscriber(f"{self.nodeName}/base_scan", LaserScan, self.check_obstacle)
+
         self.targetNodeName = f"robot_{(nodeId + 1) % 3}"
         self.pub_kickstartNext = rospy.Publisher(f"{self.targetNodeName}/kickstart", Bool, queue_size=10)
 
