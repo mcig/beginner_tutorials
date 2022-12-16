@@ -2,7 +2,7 @@
 
 import rospy
 from TurtleBotAbstract import TurtlebotAbstract
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, Point, Pose2D
 from nav_msgs.msg import Odometry
 from math import pi
 from sensor_msgs.msg import LaserScan
@@ -27,13 +27,13 @@ class TurtlebotTask2(TurtlebotAbstract):
         plus15 = msg.ranges[midPoint:midPoint + 15]
         threshold = 1
         
-        # if there is an obstacle closer than 0.5 in front of the robot, pause the robot
-        if (min(minus15) < threshold or min(plus15) < threshold):
-            # encountered an obstacle rotate to related dir
-            self.sweepEdgeMovement()
-        else:
-            # no obstacle, move forward
-            self.move(threshold)
+        # # if there is an obstacle closer than 0.5 in front of the robot, pause the robot
+        # if (min(minus15) < threshold or min(plus15) < threshold):
+        #     # encountered an obstacle rotate to related dir
+        #     self.sweepEdgeMovement()
+        # else:
+        #     # no obstacle, move forward
+        #     self.move(threshold)
         pass
 
     def sweepEdgeMovement(self):
@@ -49,8 +49,11 @@ class TurtlebotTask2(TurtlebotAbstract):
         pass
 
     def update_pose(self, msg):
-        self.pose.x = msg.pose.pose.position.x
-        self.pose.y = msg.pose.pose.position.y
+        pose = msg.pose.pose
+        self.pose = Pose2D()
+        self.pose.x = pose.position.x
+        self.pose.y = pose.position.y
+        self.pose.theta = pose.orientation.theta
 
         q = (
             msg.pose.pose.orientation.x,
@@ -58,6 +61,7 @@ class TurtlebotTask2(TurtlebotAbstract):
             msg.pose.pose.orientation.z,
             msg.pose.pose.orientation.w
         )
+        
         m = tf.transformations.quaternion_matrix(q)
         _roll, _pitch, yaw = tf.transformations.euler_from_matrix(m, 'rzyx')
         self.pose.theta = yaw
