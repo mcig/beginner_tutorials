@@ -11,7 +11,8 @@ def readParams():
         horizontalR = rospy.get_param(f"R_{robotId}")
         goalX = rospy.get_param(f"GoalX_{robotId}")
         goalY = rospy.get_param(f"GoalY_{robotId}")
-        return horizontalR, goalX, goalY
+        firstRotation = rospy.get_param(f"Rotate_{robotId}")
+        return horizontalR, goalX, goalY, firstRotation
     except:
         print("Error reading parameters")
         return None
@@ -22,12 +23,13 @@ def main():
     rospy.init_node('projecttask2', anonymous=True)
 
     robot = TurtlebotTask2(robotId - 1)
-    horizontalR, goalX, goalY = readParams()
+    horizontalR, goalX, goalY, firstRotation = readParams()
     robot.setGoal(goalX, goalY)
     robot.horizontalParam = horizontalR
-    print(robot)
+    robot.nextRotation = firstRotation
 
-
+    rospy.spin()
+    
 if __name__ == '__main__':
     try:
         main()    
