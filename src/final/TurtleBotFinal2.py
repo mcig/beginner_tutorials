@@ -15,26 +15,36 @@ class TurtlebotTask2(TurtlebotAbstract):
         super().__init__(self.nodeName)
 
         self.robotName = f"robot_{nodeId + 1}"
-        self.scanner_subscriber = rospy.Subscriber(f"{self.nodeName}/base_scan", LaserScan, self.check_obstacle)
+        self.scanner_subscriber = rospy.Subscriber(f"{self.nodeName}/base_scan", LaserScan, self.check_obstacle_or_move)
 
         self.horizontalParam = None
-        self.lastRotation = 1 # 1 = right, -1 = left
+        self.nextRotation = 1 # 1 = right, -1 = left
 
-
-
-    def check_obstacle(self, msg):
+    def check_obstacle_or_move(self, msg):
         midPoint = len(msg.ranges) // 2
         
         minus15 = msg.ranges[midPoint - 15:midPoint]
         plus15 = msg.ranges[midPoint:midPoint + 15]
-        threshold = 1.2
+        threshold = 1
         
         # if there is an obstacle closer than 0.5 in front of the robot, pause the robot
         if (min(minus15) < threshold or min(plus15) < threshold):
             # encountered an obstacle rotate to related dir
+            self.sweepEdgeMovement()
+        else:
+            # no obstacle, move forward
+            self.move(threshold)
+        pass
 
-            pass
+    def sweepEdgeMovement(self):
+        self.cool_rotate(90 * self.nextRotation)
 
+        # move forward R meters
+        self.move(self.horizontalParam)
+
+        self.cool_rotate(90 * self.nextRotation)
+
+        self.nextRotation *= -1
 
         pass
 
@@ -86,12 +96,6 @@ class TurtlebotTask2(TurtlebotAbstract):
             print("Target: ", msg.angular.z)
             msg.linear.x = 0
             msg.angular.z = c * (targetrad - self.pose.theta)
-
-            # # handle negative radians using math.pi
-            # if msg.angular.z < 0:
-            #     # calculate using pi
-            #     msg.angular.z = c * (targetrad - self.pose.theta - 2 * pi)
-            #     print("CALC: ", msg.angular.z)
 
             if targetrad - start_theta > 0 and msg.angular.z < 0.008:
                 break
