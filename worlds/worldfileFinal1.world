@@ -67,7 +67,7 @@ floorplan
 	name "firstmap"
 
     bitmap "closedenv.png"
-	size [16.0 16.0 0.5]
+	size [20.0 20.0 0.5]
 	pose [ 0.000 0.000 0 90.000 ]
 )
 
