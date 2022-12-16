@@ -67,14 +67,14 @@ floorplan
 	name "firstmap"
 
     bitmap "closedenvFinal.png"
-	size [16.0 16.0 0.5]
+	size [20.0 20.0 0.5]
 	pose [ 0.000 0.000 0 90.000 ]
 )
 
 # first robot
 erratic
 ( 
-	pose [ -6 -6 0 0.000 ] 
+	pose [ -8 -8 0 90.000 ] 
 	name "robot_0" 
 	color "blue" 
 	hokuyolaser(pose [ 0.5 0.000 -0.15 0.000 ])
@@ -83,7 +83,7 @@ erratic
 # second robot
 erratic
 ( 
-	pose [ 2 -3 0 180.000 ] 
+	pose [ 8 -8 0 90.000 ] 
 	name "robot_1" 
 	color "red" 
 	hokuyolaser(pose [ 0.5 0.000 -0.15 0.000 ])
