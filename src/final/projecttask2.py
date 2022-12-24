@@ -20,7 +20,7 @@ def readParams():
 
 def main():
     print("Starting Project Task 2")
-    rospy.init_node('projecttask2', anonymous=True)
+    rospy.init_node(f'projecttask2_{robotId}', anonymous=True)
 
     robot = TurtlebotTask2(robotId - 1)
     horizontalR, goalX, goalY, firstRotation = readParams()
@@ -29,8 +29,8 @@ def main():
     robot.nextRotation = firstRotation
     print(robot)
     
-    rospy.spin()
-    
+    robot.move_and_sweep()
+
 if __name__ == '__main__':
     try:
         main()    
