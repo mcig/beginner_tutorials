@@ -148,5 +148,5 @@ class TurtlebotTask2(TurtlebotAbstract):
         print(f"{self.robotName}: Rotated to {degrees}{chr(176)}")
 
     def __str__(self):
-        return f"I am {self.robotName} and my R is {self.horizontalParam} and i will stop after {self.maxSweepCount} sweeps"
+        return f"I am {self.robotName}; my R is {self.horizontalParam} and i will stop after {self.maxSweepCount} sweeps"
     
