@@ -4,6 +4,6 @@
 
     <rosparam file="$(find beginner_tutorials)/src/final/task2.yaml" command="load" />
 
-    <node pkg="beginner_tutorials" type="projecttask2.py" args="1" name="robo1" output="screen"/>
-    <node pkg="beginner_tutorials" type="projecttask2.py" args="2" name="robo2" output="screen"/>
+    <node pkg="beginner_tutorials" type="projecttask2.py" args="1" name="robot_0" output="screen"/>
+    <node pkg="beginner_tutorials" type="projecttask2.py" args="2" name="robot_1" output="screen"/>
 </launch>
