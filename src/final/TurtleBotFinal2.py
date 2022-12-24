@@ -71,7 +71,6 @@ class TurtlebotTask2(TurtlebotAbstract):
         rate = rospy.Rate(10)
         msg = Twist()
         speed = 0.5
-        print(f"{self.robotName} distance from the goal:")
 
         while not rospy.is_shutdown():
             msg.linear.x = speed
@@ -80,13 +79,14 @@ class TurtlebotTask2(TurtlebotAbstract):
             rospy.wait_for_message(f"{self.nodeName}/odom", Odometry)
 
             if(self.pauseForSweep):
-                self.maxSweepCount -= 1
-                self.sweepEdgeMovement()
-                self.pauseForSweep = False
                 if(self.maxSweepCount == 0):
                     print(f"{self.robotName} reached the goal")
                     break
 
+                self.sweepEdgeMovement()
+                self.pauseForSweep = False
+                self.maxSweepCount -= 1
+                
             rate.sleep()
 
         msg.linear.x = 0
