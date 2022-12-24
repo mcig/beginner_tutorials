@@ -1,10 +1,8 @@
 R_1: 3
 R_2: 2
 
-GoalX_1: 7
-GoalY_1: 1
-GoalX_2: 0
-GoalY_2: -3
+MaxSweepCount_1: 5
+MaxSweepCount_2: 4
 
 Rotate_1: 1
 Rotate_2: 1

@@ -21,6 +21,7 @@ class TurtlebotTask2(TurtlebotAbstract):
         self.nextRotation = 1 # 1 south -1 north
         self.pose = Pose2D()
         self.theta = 0
+        self.maxSweepCount = None
         self.pauseForSweep = False
 
     def check_obstacle_or_move(self, msg):
@@ -66,26 +67,25 @@ class TurtlebotTask2(TurtlebotAbstract):
         _roll, _pitch, yaw = tf.transformations.euler_from_matrix(m)
         self.theta = yaw
 
-    def setGoal(self, x,y):
-        self.goalX = x
-        self.goalY = y
-        pass
-
     def move_and_sweep(self):
         rate = rospy.Rate(10)
         msg = Twist()
         speed = 0.5
+        print(f"{self.robotName} distance from the goal:")
 
-        while not (abs(self.pose.x - self.goalX) < 0.5 and abs(self.pose.y - self.goalY) < 0.5):
+        while not rospy.is_shutdown():
             msg.linear.x = speed
 
             self.vel_publisher.publish(msg)
             rospy.wait_for_message(f"{self.nodeName}/odom", Odometry)
 
             if(self.pauseForSweep):
+                self.maxSweepCount -= 1
                 self.sweepEdgeMovement()
                 self.pauseForSweep = False
-                print(f"{self.robotName}: Finished sweeping")
+                if(self.maxSweepCount == 0):
+                    print(f"{self.robotName} reached the goal")
+                    break
 
             rate.sleep()
 
@@ -148,5 +148,5 @@ class TurtlebotTask2(TurtlebotAbstract):
         print(f"{self.robotName}: Rotated to {degrees}{chr(176)}")
 
     def __str__(self):
-        return f"I am {self.robotName} and my R is {self.horizontalParam} and my goal is ({self.goalX}, {self.goalY})"
+        return f"I am {self.robotName} and my R is {self.horizontalParam} and i will stop after {self.maxSweepCount} sweeps"
     
