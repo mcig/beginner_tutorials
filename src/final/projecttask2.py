@@ -27,7 +27,8 @@ def main():
     robot.setGoal(goalX, goalY)
     robot.horizontalParam = horizontalR
     robot.nextRotation = firstRotation
-
+    print(robot)
+    
     rospy.spin()
     
 if __name__ == '__main__':
