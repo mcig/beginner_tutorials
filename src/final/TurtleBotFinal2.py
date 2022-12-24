@@ -2,7 +2,7 @@
 
 import rospy
 from TurtleBotAbstract import TurtlebotAbstract
-from geometry_msgs.msg import Twist, Point, Pose2D
+from geometry_msgs.msg import Twist, Pose2D
 from nav_msgs.msg import Odometry
 from math import pi
 from sensor_msgs.msg import LaserScan
@@ -19,6 +19,8 @@ class TurtlebotTask2(TurtlebotAbstract):
 
         self.horizontalParam = None
         self.nextRotation = 1 # 1 = right, -1 = left
+        self.pose = Pose2D()
+        self.theta = 0
 
     def check_obstacle_or_move(self, msg):
         midPoint = len(msg.ranges) // 2
@@ -27,13 +29,15 @@ class TurtlebotTask2(TurtlebotAbstract):
         plus15 = msg.ranges[midPoint:midPoint + 15]
         threshold = 1
         
-        # # if there is an obstacle closer than 0.5 in front of the robot, pause the robot
-        # if (min(minus15) < threshold or min(plus15) < threshold):
-        #     # encountered an obstacle rotate to related dir
-        #     self.sweepEdgeMovement()
-        # else:
-        #     # no obstacle, move forward
-        #     self.move(threshold)
+        # if there is an obstacle closer than 0.5 in front of the robot, pause the robot
+        if (min(minus15) < threshold or min(plus15) < threshold):
+            # encountered an obstacle rotate to related dir
+            print("Encountered an edge, rotating")
+            self.sweepEdgeMovement()
+        else:
+            # no obstacle, move forward
+            print("No obstacle, moving forward")
+            self.move(threshold)
         pass
 
     def sweepEdgeMovement(self):
@@ -53,7 +57,6 @@ class TurtlebotTask2(TurtlebotAbstract):
         self.pose = Pose2D()
         self.pose.x = pose.position.x
         self.pose.y = pose.position.y
-        self.pose.theta = pose.orientation.theta
 
         q = (
             msg.pose.pose.orientation.x,
@@ -64,7 +67,7 @@ class TurtlebotTask2(TurtlebotAbstract):
         
         m = tf.transformations.quaternion_matrix(q)
         _roll, _pitch, yaw = tf.transformations.euler_from_matrix(m, 'rzyx')
-        self.pose.theta = yaw
+        self.theta = yaw
 
     def setGoal(self, x,y):
         self.goalX = x
@@ -76,7 +79,7 @@ class TurtlebotTask2(TurtlebotAbstract):
         msg = Twist()
 
         while not rospy.is_shutdown() and self.pose.x < dist:
-            msg.linear.x = 0.1
+            msg.linear.x = 0.5
             self.vel_publisher.publish(msg)
             rospy.wait_for_message(f"{self.nodeName}/odom", Odometry)
             rate.sleep()
@@ -93,13 +96,13 @@ class TurtlebotTask2(TurtlebotAbstract):
         msg.angular.z = 0.2
 
         targetrad = degrees * pi / 180.0
-        start_theta = self.pose.theta
+        start_theta = self.theta
         c = 0.5
 
         while not rospy.is_shutdown():
             print("Target: ", msg.angular.z)
             msg.linear.x = 0
-            msg.angular.z = c * (targetrad - self.pose.theta)
+            msg.angular.z = c * (targetrad - self.theta)
 
             if targetrad - start_theta > 0 and msg.angular.z < 0.008:
                 break
