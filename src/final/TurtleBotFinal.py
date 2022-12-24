@@ -29,7 +29,7 @@ class Turtlebot(TurtlebotAbstract):
         
         minus15 = msg.ranges[midPoint - 15:midPoint]
         plus15 = msg.ranges[midPoint:midPoint + 15]
-        threshold = 1.2
+        threshold = 1.3
         
         # if there is an obstacle closer than 0.5 in front of the robot, pause the robot
         if (min(minus15) < threshold or min(plus15) < threshold):
